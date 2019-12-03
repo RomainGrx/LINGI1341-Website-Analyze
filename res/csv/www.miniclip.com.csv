@@ -1,0 +1,113 @@
+,0
+response,"     status statusText httpVersion                                            cookies redirectURL  headersSize  bodySize  _transferSize                      _error
+0       200               http/2.0  [{'name': '_country_code', 'value': 'BE', 'pat...                       -1        -1          39995                         NaN
+1       200               http/2.0                                                 []                       -1         0              0                         NaN
+2         0                                                                        []                       -1        -1              0  net::ERR_BLOCKED_BY_CLIENT
+3       200               http/2.0                                                 []                       -1         0              0                         NaN
+4       200               http/2.0                                                 []                       -1         0              0                         NaN
+..      ...        ...         ...                                                ...         ...          ...       ...            ...                         ...
+124     200               http/2.0                                                 []                       -1         0              0                         NaN
+125     200               http/2.0                                                 []                       -1         0              0                         NaN
+126     200               http/2.0                                                 []                       -1         0              0                         NaN
+127     200               http/2.0                                                 []                       -1         0              0                         NaN
+128     200               http/2.0                                                 []                       -1         0              0                         NaN
+
+[129 rows x 9 columns]"
+request,"    method                                                url httpVersion                      queryString                                            cookies  headersSize  bodySize postData
+0      GET                 https://www.miniclip.com/games/fr/    http/2.0                               []  [{'name': 'top-smartphone', 'value': 'appleiph...           -1         0      NaN
+1      GET  https://static.miniclipcdn.com/layout/icons/de...    http/2.0                               []                                                 []           -1         0      NaN
+2      GET  https://js-sec.indexww.com/ht/p/185008-1004715...                                           []                                                 []           -1         0      NaN
+3      GET  https://static.miniclipcdn.com/bundle/games.4f...    http/2.0  [{'name': '1411', 'value': ''}]                                                 []           -1         0      NaN
+4      GET  https://static.miniclipcdn.com/styles/css/game...    http/2.0  [{'name': '1411', 'value': ''}]                                                 []           -1         0      NaN
+..     ...                                                ...         ...                              ...                                                ...          ...       ...      ...
+124    GET  https://www.miniclip.com/brand/favicons/icon-1...    http/2.0                               []                                                 []           -1         0      NaN
+125    GET  https://www.miniclip.com/brand/favicons/icon-1...    http/2.0                               []                                                 []           -1         0      NaN
+126    GET  https://www.miniclip.com/brand/favicons/icon-1...    http/2.0                               []                                                 []           -1         0      NaN
+127    GET  https://www.miniclip.com/brand/favicons/favico...    http/2.0                               []                                                 []           -1         0      NaN
+128    GET  https://static.miniclipcdn.com/images/big-imag...    http/2.0                               []                                                 []           -1         0      NaN
+
+[129 rows x 8 columns]"
+_initiator,"       type                                 url  lineNumber                                              stack
+0     other                                 NaN         NaN                                                NaN
+1    parser  https://www.miniclip.com/games/fr/        12.0                                                NaN
+2    parser  https://www.miniclip.com/games/fr/        62.0                                                NaN
+3    parser  https://www.miniclip.com/games/fr/       152.0                                                NaN
+4    parser  https://www.miniclip.com/games/fr/       153.0                                                NaN
+..      ...                                 ...         ...                                                ...
+124   other                                 NaN         NaN                                                NaN
+125   other                                 NaN         NaN                                                NaN
+126   other                                 NaN         NaN                                                NaN
+127   other                                 NaN         NaN                                                NaN
+128  script                                 NaN         NaN  {'callFrames': [{'functionName': '', 'scriptId...
+
+[129 rows x 4 columns]"
+timings,"      blocked  dns  ssl  connect   send     wait  receive  _blocked_queueing
+0    4.628000 -1.0 -1.0     -1.0  0.117  231.185    7.369              2.880
+1   -1.000000 -1.0 -1.0     -1.0  0.000    0.059    0.009             -1.000
+2    0.046201 -1.0 -1.0     -1.0  0.000    0.000    0.000             -1.000
+3    4.474000 -1.0 -1.0     -1.0  0.000    0.914    3.260              1.228
+4    4.485000 -1.0 -1.0     -1.0  0.000    0.972    1.919              1.894
+..        ...  ...  ...      ...    ...      ...      ...                ...
+124  1.642000 -1.0 -1.0     -1.0  0.000    0.298    0.453              0.551
+125  1.673000 -1.0 -1.0     -1.0  0.000    0.333    0.557              0.589
+126  2.076000 -1.0 -1.0     -1.0  0.000    0.738    0.488              0.552
+127  1.672000 -1.0 -1.0     -1.0  0.000    0.296    0.508              0.618
+128 -1.000000 -1.0 -1.0     -1.0  0.000    0.123    0.017             -1.000
+
+[129 rows x 8 columns]"
+response_content,"       size                  mimeType                                               text encoding  compression
+0    192728                 text/html  <!DOCTYPE html>\n<html lang=""fr"" prefix=""og: h...      NaN          NaN
+1      1298                 image/png  iVBORw0KGgoAAAANSUhEUgAAAJYAAABuCAMAAADyHhqkAA...   base64          NaN
+2         0                 x-unknown                                                NaN      NaN          NaN
+3    154560                  text/css  body{margin:0}iframe{border:none}a:focus{outli...      NaN          NaN
+4     20080                  text/css  #game-content{*zoom:1;margin-bottom:8px;positi...      NaN          NaN
+..      ...                       ...                                                ...      ...          ...
+124    4449                 image/png  iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAA...   base64          NaN
+125    6672                 image/png  iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAA...   base64          NaN
+126    6873                 image/png  iVBORw0KGgoAAAANSUhEUgAAAMQAAADECAYAAADApo5rAA...   base64          NaN
+127    5430  image/vnd.microsoft.icon  AAABAAIAEBAAAAEAIABoBAAAJgAAACAgAAABACAAqBAAAI...   base64          NaN
+128   39142                image/jpeg  /9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBA...   base64          NaN
+
+[129 rows x 5 columns]"
+response_headers,"    status              content-type content-length                        cache-control content-encoding  content-security-policy                           date                        expires  ... access-control-expose-headers content-range fb-s x-amz-request-id x-amz-id-2 x-timer x-cache-hits facebook-api-version
+0      200  text/html; charset=UTF-8          39062  no-store, no-cache, must-revalidate             gzip  frame-ancestors 'self';  Sun, 24 Nov 2019 09:47:00 GMT  Thu, 19 Nov 1981 08:52:00 GMT  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+1      200                 image/png           1298                        max-age=14400              NaN                      NaN  Sun, 24 Nov 2019 09:45:49 GMT                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+2      NaN                       NaN            NaN                                  NaN              NaN                      NaN                            NaN                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+3      200                  text/css          30278                        max-age=14400             gzip                      NaN  Sun, 24 Nov 2019 09:45:49 GMT                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+4      200                  text/css           4657                        max-age=14400             gzip                      NaN  Sun, 24 Nov 2019 09:45:49 GMT                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+..     ...                       ...            ...                                  ...              ...                      ...                            ...                            ...  ...                           ...           ...  ...              ...        ...     ...          ...                  ...
+124    200                 image/png           4449             max-age=31536000, public              NaN                      NaN  Sun, 24 Nov 2019 09:45:55 GMT                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+125    200                 image/png           6672             max-age=31536000, public              NaN                      NaN  Sun, 24 Nov 2019 09:45:55 GMT                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+126    200                 image/png           6873             max-age=31536000, public              NaN                      NaN  Sun, 24 Nov 2019 09:45:56 GMT                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+127    200  image/vnd.microsoft.icon           5430             max-age=31536000, public              NaN                      NaN  Sun, 24 Nov 2019 09:46:18 GMT                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+128    200                image/jpeg          39142                        max-age=14400              NaN                      NaN  Sun, 24 Nov 2019 09:45:56 GMT                            NaN  ...                           NaN           NaN  NaN              NaN        NaN     NaN          NaN                  NaN
+
+[129 rows x 52 columns]"
+request_headers,"    :method        :authority :scheme       :path cache-control upgrade-insecure-requests                                         user-agent                                             accept  ... purpose x-client-data range chrome-proxy x-chrome-id-consistency-request x-chrome-connected viewport-width pragma
+0       GET  www.miniclip.com   https  /games/fr/     max-age=0                         1  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5...  text/html,application/xhtml+xml,application/xm...  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+1       NaN               NaN     NaN         NaN           NaN                       NaN                                                NaN                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+2       NaN               NaN     NaN         NaN           NaN                       NaN  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5...                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+3       NaN               NaN     NaN         NaN           NaN                       NaN  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5...                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+4       NaN               NaN     NaN         NaN           NaN                       NaN  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5...                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+..      ...               ...     ...         ...           ...                       ...                                                ...                                                ...  ...     ...           ...   ...          ...                             ...                ...            ...    ...
+124     NaN               NaN     NaN         NaN           NaN                       NaN  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5...                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+125     NaN               NaN     NaN         NaN           NaN                       NaN  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5...                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+126     NaN               NaN     NaN         NaN           NaN                       NaN  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5...                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+127     NaN               NaN     NaN         NaN           NaN                       NaN  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5...                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+128     NaN               NaN     NaN         NaN           NaN                       NaN                                                NaN                                                NaN  ...     NaN           NaN   NaN          NaN                             NaN                NaN            NaN    NaN
+
+[129 rows x 27 columns]"
+infos,"              startedDateTime        time cache         serverIPAddress _priority connection pageref _fromCache
+0    2019-11-24T09:47:00.809Z  243.299000    {}           54.240.168.30  VeryHigh       2759  page_3        NaN
+1    2019-11-24T09:47:01.115Z    0.068000    {}  [2606:4700::6811:7bf5]   VeryLow       2786  page_3     memory
+2    2019-11-24T09:47:01.205Z    0.046201    {}                               Low        NaN  page_3        NaN
+3    2019-11-24T09:47:01.206Z    8.648000    {}  [2606:4700::6811:7bf5]  VeryHigh        NaN  page_3       disk
+4    2019-11-24T09:47:01.206Z    7.376000    {}  [2606:4700::6811:7bf5]  VeryHigh        NaN  page_3       disk
+..                        ...         ...   ...                     ...       ...        ...     ...        ...
+124  2019-11-24T09:47:06.632Z    2.393000    {}           54.240.168.30      High        NaN  page_3       disk
+125  2019-11-24T09:47:06.636Z    2.563000    {}           54.240.168.30      High        NaN  page_3       disk
+126  2019-11-24T09:47:06.640Z    3.302000    {}           54.240.168.30      High        NaN  page_3       disk
+127  2019-11-24T09:47:06.645Z    2.476000    {}           54.240.168.30      High        NaN  page_3       disk
+128  2019-11-24T09:47:08.311Z    0.140000    {}  [2606:4700::6811:7bf5]   VeryLow       2786  page_3     memory
+
+[129 rows x 8 columns]"
