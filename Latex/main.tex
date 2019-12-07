@@ -23,11 +23,11 @@
 
 % Title.
 % ------
-\title{Website analyse}
+\title{Website analyse : \textit{miniclip.com}}
 %
 % Single address.
 % ---------------
-\name{Romain Graux (28681700)
+\name{28681700
 \thanks{Thanks to my mum.}}
 \address{}
 %
@@ -137,28 +137,142 @@ When the client load the website free from cookies (First time or in incognito t
 %     \item[--] \textbf{youtube}
 % \end{itemize}
 
-\subsection{Ports}
+\subsection{TCP Ports}
 \label{sub:ports}
 
 Every HTTPS request is established over the port 443 and every HTTP request is established over the port 80.
 
+\subsection{Non stantard headers}
+\label{sub:nonstandard}
+
+\subsection{Round Trip Time (RTT)}
+\label{sub:rtt}
+
+From the same computer in Louvain-la-Neuve, we obtain a RTT of 2.015 ms in average (on 33 packets). But we obtain different figures from other localisations, here are the figures : 
+\begin{itemize}
+    \itemsep-0.1em 
+    \item United States :  0.775 ms
+    \item South Korea : 1.549 ms
+    \item Libramont, BE : 10.675 ms
+    \item France : 26.801 ms
+    \item Brazil : 206.450 ms
+\end{itemize}
+
 \section{DNS}
 \label{sec:DNS}
 
-% ns-251.awsdns-31.com
-% ns-867.awsdns-44.net
-% ns-1518.awsdns-61.org
-% ns-1577.awsdns-05.co.uk
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.45\textwidth]{Latex/res/imgs/dig.png}
+%     \caption{dig miniclip.com}
+%     \label{fig:dig}
+% \end{figure}
 
-% Miniclip has 4 DNS : {ns-251.awsdns-31.com}, {ns-867.awsdns-44.net}, {ns-1518.awsdns-61.org} and {ns-1577.awsdns-05.co.uk}. All can be accessed either in IPv6 or IPv4.
+For this section we will focus on the different IP adresses, the name server and the Time To Live (TTL) of each address.
 
-Miniclip uses 4 different IPv4 addresses $13.225.233.84$, $13.225.233.19$, $13.225.233.7$ and $13.225.233.45$. 
+\subsection{IP adresses}
 
-\section{TCP}
+\subsubsection{Explaination}
+\label{subsub:ipexp}
+
+\textit{\underline{About }}: All tests were made on the 6$^{\text{th}}$ of December 2019, in \href{https://goo.gl/maps/o6d29MMUkajAf4NXA}{Intel room} located in \href{https://goo.gl/maps/o6d29MMUkajAf4NXA}{Louvain-la-Neuve}.
+
+\vspace{0.5cm}
+
+Miniclip uses 4 different IPv4 addresses: 
+\begin{itemize}
+    \itemsep-0.1em 
+    \item $13.225.233.7$
+    \item $13.225.233.19$
+    \item $13.225.233.45$
+    \item $13.225.233.84$
+\end{itemize}
+
+To get more informations about these addresses : As seen on \textit{IP wanana} website \cite{ip}, all of these 4 addresses are hosted by \textit{Xerox Corporation} located in \href{https://goo.gl/maps/ArqaLQaFP1qYbP2j8}{Norwalk} in United-States. In fact these addresses are Content Delivery Networks (CDN), if we send a request from UK (with \url{https://gf.dev/}), we obtain 4 different addresses that have the prefix $13.35.0.0/16$ and are hosted by Amazon as we can see on the IP range file of aws \cite{awsrange}. 
+
+So, CDN's contacted for the request depends on the localisation of the client to ensure the best speed for the client.
+
+\subsubsection{Time To Live}
+\label{subsub:ipttl}
+
+The Time To Live of the CDN is set to 60 seconds because the best CDN may change over the network due to other users and the network bandwidth volatility (congestion, load, ...). Enabling to a good load-balancing network because it is between the client and the CDN that the most information (in term of bytes) is shared so we need a responsiveness network.
+
+\subsection{Name servers}
+\subsubsection{Explaination}
+\label{subsub:nsexp}
+
+The Name Server's (NS) used by \url{miniclip.com} are:
+\begin{itemize}
+    \itemsep-0.1em 
+    \item ns-251.awsdns-31.com
+    \item ns-867.awsdns-44.net
+    \item ns-1577.awsdns-05.co.uk
+    \item ns-1518.awsdns-61.org
+\end{itemize}
+
+These Name Server's are all from \textit{aws} and are located in different towns in United-States. These addresses can be reached by IPv4 or IPv6, there prefix are respectively 205.251.0.0/16 and 2600:9000::/32 .
+
+\subsubsection{Time To Live}
+\label{subsub:nsttl}
+
+The Time To Live of these Name Servers correspondings to the domain name are set to approximatly 6 hours. And the IP addresses corresponding to the Name Servers have also a TTL of approximatly 6 hours. These TTL are pretty long because the Domain Name is pretty static so Name Servers are well set for a long time and Name Servers don't change their IP address too often. Of course it is better to refresh as much as possible but it is really expensive for the network to send request, instead each server trust its cache for the TTL.
+
+\subsection{Extra records}
+\label{subsub:extra}
+
+For \url{miniclip.com}, we have 3 extra records that are MX, TXT and SOA.
+\begin{itemize}
+    \itemsep-0.1em
+    \item \textbf{MX} specifies the mail server responsible for accepting email messages on behalf of a domain name \cite{mx}, here it is \url{miniclip-com.mail.protection.outlook.com} . 
+    \item \textbf{TXT} is used to add extra arbitrary text over a host, readable information for a human.
+    \item \textbf{SOA} (Start of Authority) is used to control zone transfers between the slave server and the master server. It also contains administrative informations.
+\end{itemize}
+
+
+
+\section{Transport Layer Security (TLS)}
 \label{sec:TCP}
+% Cipher Suite: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (0xc02f)
+
+To ensure the security of its clients, miniclip uses the version 1.2 of Transport Layer Security (TLSv1.2) protocol. This protocol is used to encapsuled the information with a encryption. To trust the server, the client has to see the server's certificate.
+
+\subsection{Certificate}
+\label{sub:certificate}
+
+It is a X.509v3 certificate.
+
+\subsubsection{Issuer}
+The server's certificate is issued by Amazon (Certificate Authority). This certificate is used on the domain (miniclip.com) and all subdomains.
+
+Certifcates have hierarchical authorities, the most important is the root, here, we have got :
+
+\[
+    \begin{array}{c}
+        \text{miniclip.com}\\\text{(End-user)}
+    \end{array}
+    \xrightarrow[]{\text{issuer}}
+    \begin{array}{c}
+        \text{Amazon}\\\text{(Intermediate)}
+    \end{array}
+    \xrightarrow[]{\text{issuer}}
+    \begin{array}{c}
+        \text{Amazon Root CA}\\\text{(Root)}
+    \end{array}
+\]
 
 
+\subsubsection{Encryption/Decryption}
+It uses \texttt{SHA-256 with RSA Encryption}.
 
+SHA-256 is used to hash the message, it is a unilateral hash algorithm and it produces a 256 bits message.
+
+RSA (Rivest–Shamir–Adleman) is a cryptosystem based on a pair of private and public keys. The public key is shared to everyone and is used ton encrypt message. The private key is used to decrypted the message and is unique, it is kept secret.
+
+
+\subsubsection{Validity}
+
+\subsection{Protocol}
+\label{sub:protocol}
 
 
 % References should be produced using the bibtex program from suitable
