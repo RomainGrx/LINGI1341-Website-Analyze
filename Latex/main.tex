@@ -18,7 +18,7 @@
 \renewcommand{\thesubsubsection}{\alph{subsubsection}}
 
 
-
+%prout
 
 
 % Title.
@@ -92,13 +92,13 @@ When we are on \link{https://www.miniclip.com}, the client will send an \textit{
 Then the client send the \textit{request header} to the server that will return a \texttt{200 Status Code} and the
 source code of the page stored in the body, the client is now able to load the content.
 
-Every HTTPS request is established over the port 443 and every HTTP request is established over the port 80.
-
 \subsection{Resources types}
 \label{sub:res}
 
 When the client as load the HTML, he needs to load all the content linking in the file from different domain (\url{www.youtube.com}, \url{apis.google.com}, \url{static.miniclipcdn.com}, , ...). For that, it sends requests to all server that contains data, for the main page, it sends 94 requests. As we are on \textit{HTTP/2.0}, \textit{multiplexing} is used and one connection is established between the client and a domain containing data the client needs to download.
 % The website need a lot of images to illustrate games you can choose.
+
+Resources loading from \textit{miniclip} are not only loaded from one \textit{miniclip} domain. For example, resources are loaded from \url{static.miniclipcdn.com}, \url{static2.miniclipcdn.com} or \url{static3.miniclipcdn.com}. This behavior is due to the browser that has a hard limit on the number of parallel requests it can execute to the same domain at the same time. Here the client is able to load three times more information at the same time.
 
 \begin{figure}[h]
     \centering
@@ -107,9 +107,52 @@ When the client as load the HTML, he needs to load all the content linking in th
     \label{fig:res}
 \end{figure}
 
+\subsection{Cookies}
+\label{sub:cookies}
+
+\subsubsection{Types}
+
+There are a lot of cookies used to track the client along all the website. They can be set by \textit{miniclip} itself or other website when request are made (IFrame or JS). There are cookies for advertisment that are set in normal mode or 'incognito' mode (\texttt{$\_\_$gads} is a Google cookie preventing the same ads from being shown to the client too many times, \texttt{$\_$fbp} is a Facebook cookie used too set third-party advertisement,...). There are cookies for identifying the client (). There are also cookies about client information such as localisation, language, ... (\texttt{$\_$country$\_$code} is used to indentify the client country, \texttt{$\_$eu$\_$cookie} is used to identfy if the client is in Europe, \texttt{$\_$language$\_$code} is used to identify the language that has to be chosen by the server, ...)
+
+\subsubsection{Weird behavior}
+
+When the client load the website free from cookies (First time or in incognito tab), \texttt{$\_\_$gads} and \texttt{$\_$fbp} cookies don't appear anywhere, that means that they are not set anywhere when the ressources are loaded. In fact, they are set from a \textit{JavaScript} file,the \texttt{$\_\_$gads} cookie is set in the Javascript contained in \url{https://securepubads.g.doubleclick.net/gpt/pubads_impl_modern_2019112101.js} the \texttt{$\_$fbp} cookie is set in \url{https://connect.facebook.net/signals/config/1451566791782906?v=2.9.14&r=stable}.
+% On \textit{miniclip}, there are 4 different cookies owners: \textit{miniclip, google, youtube} and \textit{facebook}.
+% \begin{itemize}
+%     \item[--] \textbf{miniclip}
+%     \begin{itemize}
+%         \item \texttt{\_country\_code, \_eu\_cookie} : Contain localisation informations.
+%         \item \texttt{\_fbp} : It is a Facebook cookie that is used for advertisment.
+%         \item \texttt{\_\_ads} : It is a Google cookie that is used to not showing the client too much time same advertisments.
+%     \end{itemize}
+%     \item[--] \textbf{facebook}
+%     If the client have already registered, he has these cookies \cite{facebook-cookies}:
+%     \begin{itemize}
+%         \item \texttt{act} : Tells when the user logged in.
+%         \item \texttt{c\_user} : Contains the facebook login ID.
+%         \item ...
+%     \end{itemize}
+%     When the user has open an incognito tab, these cookies are session cookies, instead, they expire in 90 days.
+%     \item[--] \textbf{google}
+%     \item[--] \textbf{youtube}
+% \end{itemize}
+
+\subsection{Ports}
+\label{sub:ports}
+
+Every HTTPS request is established over the port 443 and every HTTP request is established over the port 80.
+
 \section{DNS}
 \label{sec:DNS}
 
+% ns-251.awsdns-31.com
+% ns-867.awsdns-44.net
+% ns-1518.awsdns-61.org
+% ns-1577.awsdns-05.co.uk
+
+% Miniclip has 4 DNS : {ns-251.awsdns-31.com}, {ns-867.awsdns-44.net}, {ns-1518.awsdns-61.org} and {ns-1577.awsdns-05.co.uk}. All can be accessed either in IPv6 or IPv4.
+
+Miniclip uses 4 different IPv4 addresses $13.225.233.84$, $13.225.233.19$, $13.225.233.7$ and $13.225.233.45$. 
 
 \section{TCP}
 \label{sec:TCP}
