@@ -158,6 +158,9 @@ From the same computer in Louvain-la-Neuve, we obtain a RTT of 2.015 ms in avera
     \item Brazil : 206.450 ms
 \end{itemize}
 
+\subsection{Traceroute}
+\label{sub:trace}
+
 \section{DNS}
 \label{sec:DNS}
 
@@ -234,7 +237,22 @@ For \url{miniclip.com}, we have 3 extra records that are MX, TXT and SOA.
 \label{sec:TCP}
 % Cipher Suite: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (0xc02f)
 
-To ensure the security of its clients, miniclip uses the version 1.2 of Transport Layer Security (TLSv1.2) protocol. This protocol is used to encapsuled the information with a encryption. To trust the server, the client has to see the server's certificate.
+To ensure the security of its clients, miniclip uses the version 1.2 of Transport Layer Security (TLSv1.2) protocol with HSTS mechanism. This protocol is used to encapsuled the information with a encryption. To trust the server, the client has to see the server's certificate.
+
+% EXPLIQUER LES ETAPES (HANDSHAKE, TICKET, ...)
+
+\subsection{HSTS (HTTP Strict Transport Security)}
+\label{sub:hsts}
+
+From the moment \textit{miniclip.com} has HSTS mechanism, it is only accessible using HTTPS connection and so, TLS is forced to be used. In all HTTP/2.0 answers headers, we have got \texttt{strict-transport-security: max-age=
+63072000; includeSubDomains; preload}
+
+\begin{itemize}
+    \itemsep -0.1em
+    \item \textbf{max-age} is the time, in seconds, that the browser should remember that a site is only to be accessed using HTTPS.
+    \item \textbf{includeSubDomains} tells that this rule applies to all of the site's subdomains as well.
+    \item \textbf{preload} is using to preload a list that contains domains names that by default support HSTS.
+\end{itemize}
 
 \subsection{Certificate}
 \label{sub:certificate}
@@ -242,7 +260,7 @@ To ensure the security of its clients, miniclip uses the version 1.2 of Transpor
 It is a X.509v3 certificate.
 
 \subsubsection{Issuer}
-The server's certificate is issued by Amazon (Certificate Authority). This certificate is used on the domain (miniclip.com) and all subdomains.
+The server's certificate is issued by Amazon (AIA: \url{http://crt.sca1b.amazontrust.com/sca1b.crt}). This certificate is used on the domain (miniclip.com) and all subdomains.
 
 Certifcates have hierarchical authorities, the most important is the root, here, we have got :
 
@@ -256,9 +274,25 @@ Certifcates have hierarchical authorities, the most important is the root, here,
     \end{array}
     \xrightarrow[]{\text{issuer}}
     \begin{array}{c}
-        \text{Amazon Root CA}\\\text{(Root)}
+        \text{Amazon Root CA}\\\text{(Intermediate)}
     \end{array}
 \]
+
+\[    
+    \xrightarrow[]{\text{issuer}}
+    \begin{array}{c}
+        \text{Starfield Services Root Certificate Authority}\\\text{(Intermediate)}
+    \end{array}
+\]
+
+\[     
+    \xrightarrow[]{\text{issuer}}
+    \begin{array}{c}
+        \text{Starfield Technologies, Inc.}\\\text{(Root)}
+    \end{array}
+\]
+
+As seen on \href{https://www.ssllabs.com/ssltest/analyze.html?d=miniclip.com&s=99.84.224.21}{SSLabs}, we can see that the handshake works with a lot of browser.
 
 
 \subsubsection{Encryption/Decryption}
@@ -266,13 +300,12 @@ It uses \texttt{SHA-256 with RSA Encryption}.
 
 SHA-256 is used to hash the message, it is a unilateral hash algorithm and it produces a 256 bits message.
 
-RSA (Rivest–Shamir–Adleman) is a cryptosystem based on a pair of private and public keys. The public key is shared to everyone and is used ton encrypt message. The private key is used to decrypted the message and is unique, it is kept secret.
+RSA (Rivest–Shamir–Adleman) is a cryptosystem based on a pair of private and public keys. The public key is shared to everyone and is used to encrypt message. The private key is used to decrypt the message and is unique, it is kept secret.
 
 
 \subsubsection{Validity}
 
-\subsection{Protocol}
-\label{sub:protocol}
+On the 7$^{\text{th}}$ of December 2019, the certificate of miniclip.com is available until 3$^{\text{rd}}$ of October 2020, 12 am. The more the Certificat Authority is important the more the validity is long because the CA is more reliable.
 
 
 % References should be produced using the bibtex program from suitable
