@@ -85,22 +85,42 @@ To perform the analyze, I need somme tools :
 
 As said in \nameref{sub:web}, the url \link{http://miniclip.com} is automatically redirected to \link{https://www.miniclip.com/games/en/}, this behavior is due to my browser and will not act necessarily the same on a different browser. 
 
-First, the client will send an \textit{HTTP/2.0} request to the server that contains inter alia \texttt{Upgrade-Insecure- Requests} field set to \texttt{1}. As mention on \textit{MDN} website \cite{upgrade-insecure-request}, this field tells to the server that, if it is available, it should redirect the client to the \textit{HTTPS} version and \texttt{Status Code} returns \texttt{301}, this field means that it has to be redirected to the URL stored in the \texttt{location} field \cite{status-code-301}, so let's move to \link{https://www.miniclip.com} .
+Before requesting \url{https://www.miniclip.com/games/en/}, the browser will be redirected three times dur to the \textbf{301 HTTP status} returned by each request. The 301 status tells to the browser that he has to request the url contained in the \texttt{location} field.
 
-When we are on \link{https://www.miniclip.com}, the client will send an \textit{HTTP/2.0} request to the server that once again contains the \texttt{Upgrade-Insecure-Requests} field set to \texttt{1} but also contains the \texttt{Accept-Language} field set to \texttt{en} (in my case). It will act the same as aforementioned, the server will set the \texttt{Status Code} field to \texttt{301} and set the \texttt{location} field to \link{https://www.miniclip.com/games/en/} and we are redirected.
 
-Then the client send the \textit{request header} to the server that will return a \texttt{200 Status Code} and the
-source code of the page stored in the body, the client is now able to load the content.
+\textbf{1.}
+The browser will send an \textit{HTTP/1.1} request (\url{http://miniclip.com}) to the server (as requested) that contains inter alia \texttt{Upgrade-Insecure-Requests} field set to \texttt{1}. As mention on \textit{MDN} website \cite{upgrade-insecure-request}, this field tells to the server that, if it is available, it should redirect the client to the \textit{HTTPS} version. As the server can be reached in HTTPS, it returns a 301 status code with \texttt{location} field set to \url{https://miniclip.com}.
+
+\textbf{2.} 
+Then the browser will moved permanently to the last \texttt{location} field value with an \textit{HTTP/2.0} request. The response will again return a 301 status code to the \texttt{location} \url{https://www.miniclip.com}, a subdomain of miniclip.com. Now, all HTTP requests will be done in \textit{HTTP/2.0}.
+
+\textbf{3.}
+From the beginning, all HTTP requests contained an \texttt{Accept-Language} field set to \texttt{en} (in my case) but it is more interesting in this request. The new request to the subdomain will once more return a 301 status code to \url{https://www.miniclip.com/games/en/}. We can see that we are redirected to the english page but it can redirected you to a lot of available language page. The browser contains a priority queue with accepted languages that it sends in HTTP request and the server choose the most prefered language available in its pages.
+
+
+And finally the client will request the new url to the server that will return a \texttt{200 Status Code} (OK) and the
+source code of the page stored in the body, the client is now able to load the content (HTML file).
+
+\subsection{Resources domains}
+\label{sub:resdom}
+
+When the client as load the HTML, he needs to load all the content linking in the file from different domain (\url{www.youtube.com}, \url{apis.google.com}, \url{static.miniclipcdn.com}, , ...). For that, it sends requests to all server that contains data, for the main page, it sends 94 requests. The eight most request domains are represented in Figure \ref{fig:res} with the number of request. As we are on \textit{HTTP/2.0}, \textit{multiplexing} is used and one connection is established between the client and a domain containing data that the client needs to download.
+% The website need a lot of images to illustrate games you can choose.
+Resources loading from \textit{miniclip} are not only loaded from one \textit{miniclip} domain. For example, resources are loaded from \url{static.miniclipcdn.com}, \url{static2.miniclipcdn.com} or \url{static3.miniclipcdn.com}. This behavior is due to the browser that has a hard limit on the number of parallel requests it can execute to the same domain at the same time. Here the client is able to load three times more information at the same time.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.45\textwidth]{res/imgs/domains.png}
+    \caption{Resources domains}
+    \label{fig:resdom}
+\end{figure}
 
 \subsection{Resources types}
 \label{sub:res}
 
-When the client as load the HTML, he needs to load all the content linking in the file from different domain (\url{www.youtube.com}, \url{apis.google.com}, \url{static.miniclipcdn.com}, , ...). For that, it sends requests to all server that contains data, for the main page, it sends 94 requests. As we are on \textit{HTTP/2.0}, \textit{multiplexing} is used and one connection is established between the client and a domain containing data the client needs to download.
-% The website need a lot of images to illustrate games you can choose.
+As seen on the Figure \ref{fig:resdom}, 57\% of the data loaded is mp4. It is due to a single video that is shown to present a game. The rest is essentially images and JavaScript, this is perfectly normal, the website has to show the preview of games and have to redirect the client if he clicks on a game.
 
-Resources loading from \textit{miniclip} are not only loaded from one \textit{miniclip} domain. For example, resources are loaded from \url{static.miniclipcdn.com}, \url{static2.miniclipcdn.com} or \url{static3.miniclipcdn.com}. This behavior is due to the browser that has a hard limit on the number of parallel requests it can execute to the same domain at the same time. Here the client is able to load three times more information at the same time.
-
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.45\textwidth]{res/imgs/resources.png}
     \caption{Resources types}
@@ -142,8 +162,11 @@ When the client load the website free from cookies (First time or in incognito t
 
 Every HTTPS request is established over the port 443 and every HTTP request is established over the port 80.
 
-\subsection{Non stantard headers}
-\label{sub:nonstandard}
+% \subsection{Non stantard headers}
+% \label{sub:nonstandard}
+
+% \textbf{X-Cache} signal that the server proxy has a valid copy of the page in its cache.
+
 
 \subsection{Round Trip Time (RTT)}
 \label{sub:rtt}
