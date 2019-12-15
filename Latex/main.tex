@@ -28,7 +28,7 @@
 % Single address.
 % ---------------
 \name{28681700
-\thanks{Thanks to my mum.}}
+}
 \address{}
 %
 % For example:
@@ -56,7 +56,7 @@
 \maketitle
 %
 \begin{abstract}
-This report contains an analyzis of the website \link{miniclip.com}. The analyze covers three particular aspects: \textit{HTTP}, \textit{DNS} and \textit{TCP} packets.
+This report contains an analysis of the website \link{miniclip.com}. The analysis covers three particular aspects: \textit{HTTP}, \textit{DNS} and \textit{TLS}.
 \end{abstract}
 %
 % \begin{keywords}
@@ -67,15 +67,16 @@ This report contains an analyzis of the website \link{miniclip.com}. The analyze
 \label{sec:intro}
 \subsection{Website}
 \label{sub:web}
-\textit{Minclip} is a free online games website. It was launched in 2001 by \textit{Robert Small} and \textit{Tihan Presbie}. The first thing to mention is that \link{miniclip.com} is automatically redirected to \link{www.miniclip.com/games/en/}, it will be explained in \textbf{\nameref{sec:HTTP}} but the analyze will be about this redirected url.
+\textit{Miniclip} is a free online games website. It was launched in 2001 by \textit{Robert Small} and \textit{Tihan Presbie}. The first thing to mention is that \link{miniclip.com} is automatically redirected to \link{www.miniclip.com/games/en/}, it will be explained in \textbf{\nameref{sec:HTTP}} section. The analysis will be focused on the main page because the content that is exposed about this page is pratically the same on all other pages. 
 \subsection{Tools}
 \label{sub:tools}
-To perform the analyze, I need somme tools :
+To perform the analysis we need some tools, so for :
 \begin{itemize}
-    \item[--] \textit{HTTP}: I used \textit{Firefox Web Developper} tools.
-    \item[--] \textit{DNS}: I used \textit{dig} command and \link{www.atlas.ripe.net}
-    \item[--] \textit{TCP}: I used \textit{WireShark}
+    \item[--] \textit{HTTP}, I used \textit{Firefox Web Developper} tools, \textit{Google Chrome Developper Tools}.
+    \item[--] \textit{DNS}: I used \textit{dig} command and \link{www.atlas.ripe.net} .
+    \item[--] \textit{TCP}: I used \textit{WireShark} and \textit{Firefox Web Developper} tools.
 \end{itemize}
+And also particular websites for each aspect that will be mentionned below.
 
 \section{HTTP}
 \label{sec:HTTP}
@@ -85,28 +86,27 @@ To perform the analyze, I need somme tools :
 
 As said in \nameref{sub:web}, the url \link{http://miniclip.com} is automatically redirected to \link{https://www.miniclip.com/games/en/}, this behavior is due to my browser and will not act necessarily the same on a different browser. 
 
-Before requesting \url{https://www.miniclip.com/games/en/}, the browser will be redirected three times dur to the \textbf{301 HTTP status} returned by each request. The 301 status tells to the browser that he has to request the url contained in the \texttt{location} field.
+Before requesting \url{https://www.miniclip.com/games/en/}, the browser will be redirected three times due to the \textbf{301 \text{or} 307 HTTP status} returned by each request. The 301 or 307 status tells to the browser that he has to request the url contained in the \texttt{location} field for many reasons.
 
 
 \textbf{1.}
-The browser will send an \textit{HTTP/1.1} request (\url{http://miniclip.com}) to the server (as requested) that contains inter alia \texttt{Upgrade-Insecure-Requests} field set to \texttt{1}. As mention on \textit{MDN} website \cite{upgrade-insecure-request}, this field tells to the server that, if it is available, it should redirect the client to the \textit{HTTPS} version. As the server can be reached in HTTPS, it returns a 301 status code with \texttt{location} field set to \url{https://miniclip.com}.
+The browser will send an \textit{HTTP/1.1} request (\url{http://miniclip.com}) to the server (as requested) that contains inter alia \texttt{Upgrade-Insecure-Requests} field set to \texttt{1}. As mention on \textit{MDN} website \cite{upgrade-insecure-request}, this field tells to the server that, if it is available, it should redirect the client to the \textit{HTTPS} version. As the server can be reached in HTTPS, it returns a 307 status code (Internal Redirect) with \texttt{location} field set to \url{https://miniclip.com}.
 
 \textbf{2.} 
-Then the browser will moved permanently to the last \texttt{location} field value with an \textit{HTTP/2.0} request. The response will again return a 301 status code to the \texttt{location} \url{https://www.miniclip.com}, a subdomain of miniclip.com. Now, all HTTP requests will be done in \textit{HTTP/2.0}.
+Then the browser will move to the \texttt{location} field value with a \textit{HTTP/2.0} request. The response headers will return a 301 status code with the \texttt{location} \url{https://www.miniclip.com}, a subdomain of miniclip.com. Now, all HTTP requests will be executed in \textit{HTTP/2.0}.
 
 \textbf{3.}
-From the beginning, all HTTP requests contained an \texttt{Accept-Language} field set to \texttt{en} (in my case) but it is more interesting in this request. The new request to the subdomain will once more return a 301 status code to \url{https://www.miniclip.com/games/en/}. We can see that we are redirected to the english page but it can redirected you to a lot of available language page. The browser contains a priority queue with accepted languages that it sends in HTTP request and the server choose the most prefered language available in its pages.
-
+From the beginning, all HTTP requests contain an \texttt{Accept-Language} field set to \texttt{en} (in my case) but it is interesting in this request. The new request to the subdomain will again return a 301 status code to \url{https://www.miniclip.com/games/en/}. We can see that we are redirected to the english main page but it can redirect the client to a lot of available language pages. The browser contains a priority queue with prefered languages for the user that it sends in HTTP request and the server chooses the most preferred language available in its pages.
 
 And finally the client will request the new url to the server that will return a \texttt{200 Status Code} (OK) and the
-source code of the page stored in the body, the client is now able to load the content (HTML file).
+source code of the page stored in the body, the client is now able to load the content (in HTML file).
 
 \subsection{Resources domains}
 \label{sub:resdom}
 
-When the client as load the HTML, he needs to load all the content linking in the file from different domain (\url{www.youtube.com}, \url{apis.google.com}, \url{static.miniclipcdn.com}, , ...). For that, it sends requests to all server that contains data, for the main page, it sends 94 requests. The eight most request domains are represented in Figure \ref{fig:res} with the number of request. As we are on \textit{HTTP/2.0}, \textit{multiplexing} is used and one connection is established between the client and a domain containing data that the client needs to download.
+When the client has loaded the HTML, he needs to load all the content linking in the file from different domains (\url{www.youtube.com}, \url{apis.google.com}, \url{static.miniclipcdn.com}, , ...). In order to do that, it sends requests to all servers that contain data. For the main page, it sends 94 requests. The eight most requested domains are represented in Figure \ref{fig:resdom} with the number of requests per domain. As we are on \textit{HTTP/2.0}, \textit{multiplexing} is used and one TCP connection is established between the client and a domain containing data that the client needs to download.
 % The website need a lot of images to illustrate games you can choose.
-Resources loading from \textit{miniclip} are not only loaded from one \textit{miniclip} domain. For example, resources are loaded from \url{static.miniclipcdn.com}, \url{static2.miniclipcdn.com} or \url{static3.miniclipcdn.com}. This behavior is due to the browser that has a hard limit on the number of parallel requests it can execute to the same domain at the same time. Here the client is able to load three times more information at the same time.
+Resources loading from \textit{miniclip} subdomain are not only loaded from one \textit{miniclip} subdomain. For example, resources are loaded from \url{static.miniclipcdn.com}, \url{static2.miniclipcdn.com} or \url{static3.miniclipcdn.com}. This behavior is due to the browser that has a hard limit on the number of parallel requests it can execute to the same domain at the same time. Here the client is able to load three times more information at the same time from miniclip subdomains.
 
 \begin{figure}[h!]
     \centering
@@ -118,7 +118,7 @@ Resources loading from \textit{miniclip} are not only loaded from one \textit{mi
 \subsection{Resources types}
 \label{sub:res}
 
-As seen on the Figure \ref{fig:resdom}, 57\% of the data loaded is mp4. It is due to a single video that is shown to present a game. The rest is essentially images and JavaScript, this is perfectly normal, the website has to show the preview of games and have to redirect the client if he clicks on a game.
+As seen on the Figure \ref{fig:res}, 57\% of the data loaded is mp4. It is due to a single video that is shown to present a game. The rest is essentially images and JavaScript, this is perfectly normal, the website has to show the preview of games (images) and uses JavaScript to animate the website, like showing five differents games every 2 seconds in a frame. Apart from that, it just needs to redirect the client if he decides to click on a game.
 
 \begin{figure}[h!]
     \centering
@@ -132,11 +132,13 @@ As seen on the Figure \ref{fig:resdom}, 57\% of the data loaded is mp4. It is du
 
 \subsubsection{Types}
 
-There are a lot of cookies used to track the client along all the website. They can be set by \textit{miniclip} itself or other website when request are made (IFrame or JS). There are cookies for advertisment that are set in normal mode or 'incognito' mode (\texttt{$\_\_$gads} is a Google cookie preventing the same ads from being shown to the client too many times, \texttt{$\_$fbp} is a Facebook cookie used too set third-party advertisement,...). There are cookies for identifying the client (). There are also cookies about client information such as localisation, language, ... (\texttt{$\_$country$\_$code} is used to indentify the client country, \texttt{$\_$eu$\_$cookie} is used to identfy if the client is in Europe, \texttt{$\_$language$\_$code} is used to identify the language that has to be chosen by the server, ...)
+There are a lot of cookies used to track the client along all the website. They can be set by \textit{miniclip} itself or other domains when requests are made (IFrame or JS). There are cookies for advertisement that are set in normal mode or 'incognito' mode (\texttt{$\_\_$gads} is a Google cookie preventing the same ads from being shown to the client too many times, \texttt{$\_$fbp} is a Facebook cookie used to set third-party advertisement, ...). There are cookies for identifying the client . There are also cookies about client information such as location, language, ... (\texttt{$\_$country$\_$code} is used to identify the client's country, \texttt{$\_$eu$\_$cookie} is used to identify if the client is in Europe, \texttt{$\_$language$\_$code} is used to identify the language that has to be chosen by the server, ...).
 
-\subsubsection{Weird behavior}
+If we try to connect our facebook account on the website, plenty of cookies set by facebook appear. First, just by clicking on the facebook connect button, a cookie named \texttt{datr} is set and serves to track the user clicking on facebook content over other websites (even without being connected). After having linked the Facebook account, we can find cookies like \texttt{c$\_$user} that contains the Facebook user ID, \texttt{fb} that helps for friend suggestions or \texttt{xs} that maintains the session over other miniclip pages or subdomains.
 
-When the client load the website free from cookies (First time or in incognito tab), \texttt{$\_\_$gads} and \texttt{$\_$fbp} cookies don't appear anywhere, that means that they are not set anywhere when the ressources are loaded. In fact, they are set from a \textit{JavaScript} file,the \texttt{$\_\_$gads} cookie is set in the Javascript contained in \url{https://securepubads.g.doubleclick.net/gpt/pubads_impl_modern_2019112101.js} the \texttt{$\_$fbp} cookie is set in \url{https://connect.facebook.net/signals/config/1451566791782906?v=2.9.14&r=stable}.
+\subsubsection{Special behavior}
+
+When the client loads the website free from cookies (First time or in 'incognito' mode), \texttt{$\_\_$gads} and \texttt{$\_$fbp} cookies don't appear anywhere, that means that they are not set anywhere when the ressources are loaded (with set\_cookie). In fact, they are set from a \textit{JavaScript}, the \texttt{$\_\_$gads} cookie is set in the Javascript contained in \url{https://securepubads.g.doubleclick.net/gpt/pubads_impl_modern_2019112101.js} and the \texttt{$\_$fbp} cookie is set in \url{https://connect.facebook.net/signals/config/1451566791782906?v=2.9.14&r=stable}.
 % On \textit{miniclip}, there are 4 different cookies owners: \textit{miniclip, google, youtube} and \textit{facebook}.
 % \begin{itemize}
 %     \item[--] \textbf{miniclip}
@@ -160,7 +162,7 @@ When the client load the website free from cookies (First time or in incognito t
 \subsection{TCP Ports}
 \label{sub:ports}
 
-Every HTTPS request is established over the port 443 and every HTTP request is established over the port 80.
+Every HTTPS request is established over the 443$^{\text{rd}}$ TCP port and every HTTP request is established over the 80$^{\text{th}}$ TCP port.
 
 % \subsection{Non stantard headers}
 % \label{sub:nonstandard}
@@ -181,9 +183,28 @@ From the same computer in Louvain-la-Neuve, we obtain a RTT of 2.015 ms in avera
     \item Brazil : 206.450 ms
 \end{itemize}
 
-\subsection{Traceroute}
-\label{sub:trace}
+% \subsection{Traceroute}
+% \label{sub:trace}
 
+% \[
+% \begin{tabular}{|c|c|c|}
+%     \hline 
+%     % vlan22.bb1.bru1.be.m247.com & 
+%      0 & 185.104.186.1 & Brussels \\
+%     \hline 
+%     %  te0-3-0-2.250.rcr21.bru01.atlas.cogentco.com &
+%      1 & 149.11.170.113 & Brussels\\
+%      \hline
+%     %  be3677.ccr42.ams03.atlas.cogentco.com &
+%      2 &  154.54.60.133 & United States\\
+%      \hline
+%     %  be2814.ccr42.fra03.atlas.cogentco.com &
+%      3 &  130.117.0.142 & Frankfurt\\
+%      \hline
+%      4 & 149.14.159.194 & Berlin\\
+%       \hline
+% \end{tabular}
+% \]
 \section{DNS}
 \label{sec:DNS}
 
@@ -194,18 +215,18 @@ From the same computer in Louvain-la-Neuve, we obtain a RTT of 2.015 ms in avera
 %     \label{fig:dig}
 % \end{figure}
 
-For this section we will focus on the different IP adresses, the name server and the Time To Live (TTL) of each address.
+For this section we will focus on the different IP addresses that are used to do HTTP requests to obtain the content of miniclip.com, name servers and the Time To Live (TTL) of each server.
 
-\subsection{IP adresses}
+\subsection{IP addresses for HTTP requests}
 
-\subsubsection{Explaination}
+\subsubsection{Explanation}
 \label{subsub:ipexp}
 
 \textit{\underline{About }}: All tests were made on the 6$^{\text{th}}$ of December 2019, in \href{https://goo.gl/maps/o6d29MMUkajAf4NXA}{Intel room} located in \href{https://goo.gl/maps/o6d29MMUkajAf4NXA}{Louvain-la-Neuve}.
 
 \vspace{0.5cm}
 
-Miniclip uses 4 different IPv4 addresses: 
+Miniclip uses four different IPv4 addresses to share its content: 
 \begin{itemize}
     \itemsep-0.1em 
     \item $13.225.233.7$
@@ -214,20 +235,21 @@ Miniclip uses 4 different IPv4 addresses:
     \item $13.225.233.84$
 \end{itemize}
 
-To get more informations about these addresses : As seen on \textit{IP wanana} website \cite{ip}, all of these 4 addresses are hosted by \textit{Xerox Corporation} located in \href{https://goo.gl/maps/ArqaLQaFP1qYbP2j8}{Norwalk} in United-States. In fact these addresses are Content Delivery Networks (CDN), if we send a request from UK (with \url{https://gf.dev/}), we obtain 4 different addresses that have the prefix $13.35.0.0/16$ and are hosted by Amazon as we can see on the IP range file of aws \cite{awsrange}. 
+To get more information about these addresses : As seen on \textit{IP wanana} website \cite{ip}, all of these four addresses are hosted by \textit{Xerox Corporation} located in \href{https://goo.gl/maps/ArqaLQaFP1qYbP2j8}{Norwalk} in the United States. In fact, these addresses are linked to Content Delivery Networks (CDN), if we send a request from the UK (with \url{https://gf.dev/}), we obtain four different addresses that have the prefix $13.35.0.0/16$ and are hosted by Amazon as we can see on the IP range file of aws \cite{awsrange}. 
 
-So, CDN's contacted for the request depends on the localisation of the client to ensure the best speed for the client.
+
+CDN's are requested because they allow the client to obtain the content as quickly as possible, each CDN has a copy of the main miniclip server. So the IP requested to obtain the content depends on the client's location and the CDN contacted.
 
 \subsubsection{Time To Live}
 \label{subsub:ipttl}
 
-The Time To Live of the CDN is set to 60 seconds because the best CDN may change over the network due to other users and the network bandwidth volatility (congestion, load, ...). Enabling to a good load-balancing network because it is between the client and the CDN that the most information (in term of bytes) is shared so we need a responsiveness network.
+The Time To Live of the CDN is set to 60 seconds because the best CDN may change over the network due to other users and the network bandwidth volatility (congestion, load, ...). The goal is to enable a well balanced and responsive network because most of the data are shared between the client and the CDN.
 
 \subsection{Name servers}
-\subsubsection{Explaination}
+\subsubsection{Explanation}
 \label{subsub:nsexp}
 
-The Name Server's (NS) used by \url{miniclip.com} are:
+Name Server's (NS) used by \url{miniclip.com} are:
 \begin{itemize}
     \itemsep-0.1em 
     \item ns-251.awsdns-31.com
@@ -236,12 +258,12 @@ The Name Server's (NS) used by \url{miniclip.com} are:
     \item ns-1518.awsdns-61.org
 \end{itemize}
 
-These Name Server's are all from \textit{aws} and are located in different towns in United-States. These addresses can be reached by IPv4 or IPv6, there prefix are respectively 205.251.0.0/16 and 2600:9000::/32 .
+these Name Server's are all from \textit{aws} and are located in different towns in the United States. these addresses can be reached over IPv4 or IPv6, their prefixes are respectively 205.251.0.0/16 and 2600:9000::/32 .
 
 \subsubsection{Time To Live}
 \label{subsub:nsttl}
 
-The Time To Live of these Name Servers correspondings to the domain name are set to approximatly 6 hours. And the IP addresses corresponding to the Name Servers have also a TTL of approximatly 6 hours. These TTL are pretty long because the Domain Name is pretty static so Name Servers are well set for a long time and Name Servers don't change their IP address too often. Of course it is better to refresh as much as possible but it is really expensive for the network to send request, instead each server trust its cache for the TTL.
+The Time To Live of these Name Servers corresponding to the domain name are set to approximatly 2 days. And the IP addresses corresponding to the Name Servers has also a TTL of 2 days. These TTL are pretty long because the Domain Name is pretty static so Name Servers are well set for a long time and Name Servers don't change their IP address too often. Of course it is better to refresh as much as possible but it is really expensive for the network to send request, instead each server trusts its cache until the TTL is surpassed.
 
 \subsection{Extra records}
 \label{subsub:extra}
@@ -249,7 +271,7 @@ The Time To Live of these Name Servers correspondings to the domain name are set
 For \url{miniclip.com}, we have 3 extra records that are MX, TXT and SOA.
 \begin{itemize}
     \itemsep-0.1em
-    \item \textbf{MX} specifies the mail server responsible for accepting email messages on behalf of a domain name \cite{mx}, here it is \url{miniclip-com.mail.protection.outlook.com} . 
+    \item \textbf{MX} specifies the mail server responsible for accepting email messages on behalf of a domain name \cite{mx}, here it is \url{miniclip-com.mail.protection.outlook.com} and it is handled by Microsoft Corporation. 
     \item \textbf{TXT} is used to add extra arbitrary text over a host, readable information for a human.
     \item \textbf{SOA} (Start of Authority) is used to control zone transfers between the slave server and the master server. It also contains administrative informations.
 \end{itemize}
@@ -260,14 +282,14 @@ For \url{miniclip.com}, we have 3 extra records that are MX, TXT and SOA.
 \label{sec:TCP}
 % Cipher Suite: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (0xc02f)
 
-To ensure the security of its clients, miniclip uses the version 1.2 of Transport Layer Security (TLSv1.2) protocol with HSTS mechanism. This protocol is used to encapsuled the information with a encryption. To trust the server, the client has to see the server's certificate.
+To ensure the security of its clients, miniclip uses the version 1.2 of Transport Layer Security (TLSv1.2) protocol with HSTS mechanism. This protocol is used to encapsulate the information with an encryption. To trust the server, the client has to see the server's certificate.
 
 % EXPLIQUER LES ETAPES (HANDSHAKE, TICKET, ...)
 
 \subsection{HSTS (HTTP Strict Transport Security)}
 \label{sub:hsts}
 
-From the moment \textit{miniclip.com} has HSTS mechanism, it is only accessible using HTTPS connection and so, TLS is forced to be used. In all HTTP/2.0 answers headers, we have got \texttt{strict-transport-security: max-age=
+Since that time when \textit{miniclip.com} has HSTS mechanism, it is only accessible using HTTPS connection and so, TLS is forced to be used. In all HTTP/2.0 answers headers, we have got \texttt{strict-transport-security: max-age=
 63072000; includeSubDomains; preload}
 
 \begin{itemize}
@@ -285,7 +307,7 @@ It is a X.509v3 certificate.
 \subsubsection{Issuer}
 The server's certificate is issued by Amazon (AIA: \url{http://crt.sca1b.amazontrust.com/sca1b.crt}). This certificate is used on the domain (miniclip.com) and all subdomains.
 
-Certifcates have hierarchical authorities, the most important is the root, here, we have got :
+Certificates have hierarchical authorities, the most important is the root, here, we have got :
 
 \[
     \begin{array}{c}
@@ -315,7 +337,7 @@ Certifcates have hierarchical authorities, the most important is the root, here,
     \end{array}
 \]
 
-As seen on \href{https://www.ssllabs.com/ssltest/analyze.html?d=miniclip.com&s=99.84.224.21}{SSLabs}, we can see that the handshake works with a lot of browser.
+As seen on \href{https://www.ssllabs.com/ssltest/analyze.html?d=miniclip.com&s=99.84.224.21}{SSLabs}, we can see that the handshake works with a lot of browsers.
 
 
 \subsubsection{Encryption/Decryption}
@@ -323,12 +345,12 @@ It uses \texttt{SHA-256 with RSA Encryption}.
 
 SHA-256 is used to hash the message, it is a unilateral hash algorithm and it produces a 256 bits message.
 
-RSA (Rivest–Shamir–Adleman) is a cryptosystem based on a pair of private and public keys. The public key is shared to everyone and is used to encrypt message. The private key is used to decrypt the message and is unique, it is kept secret.
+RSA (Rivest–Shamir–Adleman) is a cryptosystem based on a pair of private and public keys. The public key is communicated to everyone and is used to encrypt message. The private key is used to decrypt the message and is unique, it is kept secret.
 
 
 \subsubsection{Validity}
 
-On the 7$^{\text{th}}$ of December 2019, the certificate of miniclip.com is available until 3$^{\text{rd}}$ of October 2020, 12 am. The more the Certificat Authority is important the more the validity is long because the CA is more reliable.
+On the 7$^{\text{th}}$ of December 2019, the certificate of miniclip.com is available until 3$^{\text{rd}}$ of October 2020, 12 am. The more the Certificate Authority is important the more the validity is long because the CA is more reliable.
 
 
 % References should be produced using the bibtex program from suitable
