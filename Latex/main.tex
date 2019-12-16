@@ -67,7 +67,7 @@ This report contains an analysis of the website \link{miniclip.com}. The analysi
 \label{sec:intro}
 \subsection{Website}
 \label{sub:web}
-\textit{Miniclip} is a free online games website. It was launched in 2001 by \textit{Robert Small} and \textit{Tihan Presbie}. The first thing to mention is that \link{miniclip.com} is automatically redirected to \link{www.miniclip.com/games/en/}, it will be explained in \textbf{\nameref{sec:HTTP}} section. The analysis will be focused on the main page because the content that is exposed about this page is pratically the same on all other pages. 
+\textit{Miniclip} is a free online games website. It was launched in 2001 by \textit{Robert Small} and \textit{Tihan Presbie}. The first thing to mention is that \link{miniclip.com} is automatically redirected to \link{www.miniclip.com/games/en/}, it will be explained in \textbf{\nameref{sec:HTTP}} section. The analysis will focus on the main page because the content that is exposed on this page is pratically the same on all other pages. 
 \subsection{Tools}
 \label{sub:tools}
 To perform the analysis we need some tools, so for :
@@ -84,19 +84,19 @@ And also particular websites for each aspect that will be mentionned below.
 \subsection{Headers}
 \label{sub:headers}
 
-As said in \nameref{sub:web}, the url \link{http://miniclip.com} is automatically redirected to \link{https://www.miniclip.com/games/en/}, this behavior is due to my browser and will not act necessarily the same on a different browser. 
+As mentionned in the \nameref{sub:web}, the url \link{http://miniclip.com} is automatically redirected to \link{https://www.miniclip.com/games/en/}, this behavior is due to my browser and will not act necessarily the same on a different browser. 
 
 Before requesting \url{https://www.miniclip.com/games/en/}, the browser will be redirected three times due to the \textbf{301 \text{or} 307 HTTP status} returned by each request. The 301 or 307 status tells to the browser that he has to request the url contained in the \texttt{location} field for many reasons.
 
 
 \textbf{1.}
-The browser will send an \textit{HTTP/1.1} request (\url{http://miniclip.com}) to the server (as requested) that contains inter alia \texttt{Upgrade-Insecure-Requests} field set to \texttt{1}. As mention on \textit{MDN} website \cite{upgrade-insecure-request}, this field tells to the server that, if it is available, it should redirect the client to the \textit{HTTPS} version. As the server can be reached in HTTPS, it returns a 307 status code (Internal Redirect) with \texttt{location} field set to \url{https://miniclip.com}.
+The browser will send an \textit{HTTP/1.1} request (\url{http://miniclip.com}) to the server (as requested) that contains inter alia \texttt{Upgrade-Insecure-Requests} field set to \texttt{1}. As mentionned on \textit{MDN} website \cite{upgrade-insecure-request}, this field tells to the server that, if it is available, it should redirect the client to the \textit{HTTPS} version. As the server can be reached in HTTPS, it returns a 307 status code (Internal Redirect) with \texttt{location} field set to \url{https://miniclip.com}.
 
 \textbf{2.} 
 Then the browser will move to the \texttt{location} field value with a \textit{HTTP/2.0} request. The response headers will return a 301 status code with the \texttt{location} \url{https://www.miniclip.com}, a subdomain of miniclip.com. Now, all HTTP requests will be executed in \textit{HTTP/2.0}.
 
 \textbf{3.}
-From the beginning, all HTTP requests contain an \texttt{Accept-Language} field set to \texttt{en} (in my case) but it is interesting in this request. The new request to the subdomain will again return a 301 status code to \url{https://www.miniclip.com/games/en/}. We can see that we are redirected to the english main page but it can redirect the client to a lot of available language pages. The browser contains a priority queue with prefered languages for the user that it sends in HTTP request and the server chooses the most preferred language available in its pages.
+From the beginning, all HTTP requests contain an \texttt{Accept-Language} field set to \texttt{en} (in my case) but it is interesting in this request. The new request to the subdomain will again return a 301 status code to \url{https://www.miniclip.com/games/en/}. We can see that we are redirected to the english main page but it can redirect the client to a lot of available language pages. The browser contains a priority list with prefered languages for the user that it sends in HTTP request and the server chooses the most preferred language available in its pages.
 
 And finally the client will request the new url to the server that will return a \texttt{200 Status Code} (OK) and the
 source code of the page stored in the body, the client is now able to load the content (in HTML file).
@@ -104,7 +104,7 @@ source code of the page stored in the body, the client is now able to load the c
 \subsection{Resources domains}
 \label{sub:resdom}
 
-When the client has loaded the HTML, he needs to load all the content linking in the file from different domains (\url{www.youtube.com}, \url{apis.google.com}, \url{static.miniclipcdn.com}, , ...). In order to do that, it sends requests to all servers that contain data. For the main page, it sends 94 requests. The eight most requested domains are represented in Figure \ref{fig:resdom} with the number of requests per domain. As we are on \textit{HTTP/2.0}, \textit{multiplexing} is used and one TCP connection is established between the client and a domain containing data that the client needs to download.
+When the client has loaded the HTML, he needs to load all the content linked in the file from different domains (\url{www.youtube.com}, \url{apis.google.com}, \url{static.miniclipcdn.com}, , ...). In order to do that, it sends requests to all servers that contain data. For the main page, it sends 94 requests. The eight most requested domains are represented in Figure \ref{fig:resdom} with the number of requests per domain. As we are on \textit{HTTP/2.0}, \textit{multiplexing} is used and one TCP connection is established between the client and a domain containing data that the client needs to download.
 % The website need a lot of images to illustrate games you can choose.
 Resources loading from \textit{miniclip} subdomain are not only loaded from one \textit{miniclip} subdomain. For example, resources are loaded from \url{static.miniclipcdn.com}, \url{static2.miniclipcdn.com} or \url{static3.miniclipcdn.com}. This behavior is due to the browser that has a hard limit on the number of parallel requests it can execute to the same domain at the same time. Here the client is able to load three times more information at the same time from miniclip subdomains.
 
@@ -173,7 +173,7 @@ Every HTTPS request is established over the 443$^{\text{rd}}$ TCP port and every
 \subsection{Round Trip Time (RTT)}
 \label{sub:rtt}
 
-From the same computer in Louvain-la-Neuve, we obtain a RTT of 2.015 ms in average (on 33 packets). But we obtain different figures from other localisations, here are the figures : 
+From the same computer in Louvain-la-Neuve, we obtain a RTT of 2.015 ms in average (on 33 packets). But we obtain different figures from other locations, here are the figures : 
 \begin{itemize}
     \itemsep-0.1em 
     \item United States :  0.775 ms
@@ -258,7 +258,7 @@ Name Server's (NS) used by \url{miniclip.com} are:
     \item ns-1518.awsdns-61.org
 \end{itemize}
 
-these Name Server's are all from \textit{aws} and are located in different towns in the United States. these addresses can be reached over IPv4 or IPv6, their prefixes are respectively 205.251.0.0/16 and 2600:9000::/32 .
+These Name Server's are all from \textit{aws} and are located in different towns in the United States. these addresses can be reached over IPv4 or IPv6, their prefixes are respectively 205.251.0.0/16 and 2600:9000::/32 .
 
 \subsubsection{Time To Live}
 \label{subsub:nsttl}
